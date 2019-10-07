@@ -69,8 +69,9 @@ class Builder(object):
                 # found multiple others, union
                 rings_to_merge = [self.rings[id] for id in [f['id'] for f in others]]
                 lines_to_merge = [line for line in self._dump(unary_union(rings_to_merge))]
+                merged = self._linemerge(lines_to_merge)
                 logger.debug('build_linework: %s. OTHERS FOUND, merging' % (idx, ))
-                for meshline in self._line_center_sample(lines_to_merge):
+                for meshline in merged:
                     center_point = self._get_center(meshline)
                     hash = self._get_md5_hash(center_point.wkt.encode('utf-8'))
                     if hash not in self.merged and ring.intersects(center_point.buffer(0.02)):
